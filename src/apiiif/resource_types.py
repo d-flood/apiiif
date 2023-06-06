@@ -12,8 +12,9 @@ class IIIFImage(Image):
 
 
 class Annotation(BaseModel):
-    context: str = Field('http://iiif.io/api/presentation/3/context.json',
-                         alias='@context')
+    context: str = Field(
+        default='http://iiif.io/api/presentation/3/context.json',
+        alias='@context')
     id: AnyUrl
     type: str = 'Annotation'
     motivation: str = 'painting'
@@ -30,8 +31,9 @@ class Annotation(BaseModel):
 
 
 class AnnotationPage(BaseModel):
-    context: str = Field('http://iiif.io/api/presentation/3/context.json',
-                         alias='@context')
+    context: str = Field(
+        default='http://iiif.io/api/presentation/3/context.json',
+        alias='@context')
     id: AnyUrl
     type: str = 'AnnotationPage'
     items: list[Annotation] = []
@@ -60,8 +62,9 @@ class Canvas(BaseModel):
 
 
 class Manifest(BaseModel):
-    context: str = Field('http://iiif.io/api/presentation/3/context.json',
-                         alias='@context')
+    context: str = Field(
+        default='http://iiif.io/api/presentation/3/context.json',
+        alias='@context')
     id: AnyUrl
     type: str = 'Manifest'
     label: LanguageString
@@ -82,8 +85,9 @@ class Manifest(BaseModel):
 
 
 class Collection(BaseModel):
-    context: str = Field('http://iiif.io/api/presentation/3/context.json',
-                         alias='@context')
+    context: str = Field(
+        default='http://iiif.io/api/presentation/3/context.json',
+        alias='@context')
     id: AnyUrl
     type: str = 'Collection'
     label: LanguageString
