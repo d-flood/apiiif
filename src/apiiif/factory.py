@@ -13,11 +13,14 @@ class SingleLanguageFactory:
     def langugae_string(self, message: str):
         return LanguageString(**{self.auto_language: [message]})
 
-    def requiredStatement(self, label: str, value: str):
+    def label_value(self, label: str, value: str):
         return LabelValue(label=self.langugae_string(label),
                           value=self.langugae_string(value))
 
-    def thumbnail(self, url: str, width: int, height: int):
+    def requiredStatement(self, label: str, value: str):
+        return self.label_value(label, value)
+
+    def thumbnail(self, url: str, width: int = None, height: int = None):
         return Thumbnail(id=url, width=width, height=height)
 
     def logo(self, url: str, width: int, height: int):
