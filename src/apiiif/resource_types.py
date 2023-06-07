@@ -2,7 +2,7 @@ from pydantic import BaseModel, AnyUrl, Field
 
 from apiiif.resource_properties import (LanguageString, LabelValue, Provider,
                                         Thumbnail, Homepage, PartOf, Image,
-                                        Choice, ImageService)
+                                        Choice, ImageService, BaseID)
 
 
 class IIIFImage(Image):
@@ -11,11 +11,10 @@ class IIIFImage(Image):
     service: list[ImageService] = []
 
 
-class Annotation(BaseModel):
+class Annotation(BaseID):
     context: str = Field(
         default='http://iiif.io/api/presentation/3/context.json',
         alias='@context')
-    id: AnyUrl
     type: str = 'Annotation'
     motivation: str = 'painting'
     target: AnyUrl
@@ -30,11 +29,10 @@ class Annotation(BaseModel):
             self.body = Choice(items=[self.body, image])
 
 
-class AnnotationPage(BaseModel):
+class AnnotationPage(BaseID):
     context: str = Field(
         default='http://iiif.io/api/presentation/3/context.json',
         alias='@context')
-    id: AnyUrl
     type: str = 'AnnotationPage'
     items: list[Annotation] = []
 
@@ -42,8 +40,7 @@ class AnnotationPage(BaseModel):
         self.items.append(annotation)
 
 
-class Canvas(BaseModel):
-    id: AnyUrl
+class Canvas(BaseID):
     type: str = 'Canvas'
     label: LanguageString
     height: int
@@ -61,11 +58,10 @@ class Canvas(BaseModel):
 # be devided into books or major sections since many manuscripts have non-biblical texts
 
 
-class Manifest(BaseModel):
+class Manifest(BaseID):
     context: str = Field(
         default='http://iiif.io/api/presentation/3/context.json',
         alias='@context')
-    id: AnyUrl
     type: str = 'Manifest'
     label: LanguageString
     metadata: list[LabelValue] = []
@@ -84,11 +80,10 @@ class Manifest(BaseModel):
         self.items.append(canvas)
 
 
-class Collection(BaseModel):
+class Collection(BaseID):
     context: str = Field(
         default='http://iiif.io/api/presentation/3/context.json',
         alias='@context')
-    id: AnyUrl
     type: str = 'Collection'
     label: LanguageString
     requiredStatement: LabelValue | None
