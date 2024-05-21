@@ -1,12 +1,13 @@
+from multiprocessing import context
 from pydantic import BaseModel, AnyUrl, root_validator, validator
 
 
 class BaseID(BaseModel):
 
-    @validator('id', pre=True)
+    @validator("id", pre=True)
     def slugify(s):
         if isinstance(s, str):
-            return s.replace(' ', '%20')
+            return s.replace(" ", "%20")
         return s
 
     id: AnyUrl
@@ -21,7 +22,7 @@ class LanguageString(BaseModel):
     @root_validator(pre=True)
     def check_language_string(cls, values):
         if len(values) == 0:
-            raise ValueError('At least one language string must be provided.')
+            raise ValueError("At least one language string must be provided.")
         return values
 
     en: list[str] | None
@@ -33,47 +34,55 @@ class LanguageString(BaseModel):
 
 class LabelValue(BaseModel):
     """Used as the value of the requiredStatement and metadata items."""
+
     label: LanguageString
     value: LanguageString
 
 
 class Image(BaseID):
-    type: str = 'Image'
+    type: str = "Image"
     width: int | None
     height: int | None
 
 
 class Thumbnail(Image):
-    format: str = 'image/jpeg'
+    format: str = "image/jpeg"
 
 
 class Logo(Image):
-    format: str = 'image/png'
+    format: str = "image/png"
 
 
 class Homepage(BaseID):
-    type: str = 'Text'
+    type: str = "Text"
     label: LanguageString
-    format: str = 'text/html'
+    format: str = "text/html"
     language: list[str]
 
 
 class PartOf(BaseID):
-    type: str = 'Collection'
+    type: str = "Collection"
 
 
 class Provider(BaseID):
-    type: str = 'Agent'
+    type: str = "Agent"
     label: LanguageString
     homepage: list[Homepage] | None
     logo: list[Logo] | None
 
 
 class Choice(BaseModel):
-    type: str = 'Choice'
+    type: str = "Choice"
     items: list = []
 
 
 class ImageService(BaseID):
-    type: str = 'ImageService3'
-    profile: str = 'level0'
+    type: str = "ImageService3"
+    profile: str = "level0"
+
+
+# class AuthService(BaseID):
+#     context: str = 'http://iiif.io/api/auth/1/context.json'
+#     profile: str = 'http://iiif.io/api/auth/1/external'
+#     label: LanguageString
+#     type: str = 'AuthCookieService3'

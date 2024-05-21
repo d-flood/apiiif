@@ -1,22 +1,31 @@
 from pydantic import BaseModel, AnyUrl, Field
 
-from apiiif.resource_properties import (LanguageString, LabelValue, Provider,
-                                        Thumbnail, Homepage, PartOf, Image,
-                                        Choice, ImageService, BaseID)
+from apiiif.resource_properties import (
+    LanguageString,
+    LabelValue,
+    Provider,
+    Thumbnail,
+    Homepage,
+    PartOf,
+    Image,
+    Choice,
+    ImageService,
+    BaseID,
+)
 
 
 class IIIFImage(Image):
-    format: str = 'image/jpeg'
+    format: str = "image/jpeg"
     # as other services are defined, add them as options.
     service: list[ImageService] = []
 
 
 class Annotation(BaseID):
     context: str = Field(
-        default='http://iiif.io/api/presentation/3/context.json',
-        alias='@context')
-    type: str = 'Annotation'
-    motivation: str = 'painting'
+        default="http://iiif.io/api/presentation/3/context.json", alias="@context"
+    )
+    type: str = "Annotation"
+    motivation: str = "painting"
     target: AnyUrl
     body: IIIFImage | Choice | None = None
 
@@ -31,9 +40,9 @@ class Annotation(BaseID):
 
 class AnnotationPage(BaseID):
     context: str = Field(
-        default='http://iiif.io/api/presentation/3/context.json',
-        alias='@context')
-    type: str = 'AnnotationPage'
+        default="http://iiif.io/api/presentation/3/context.json", alias="@context"
+    )
+    type: str = "AnnotationPage"
     items: list[Annotation] = []
 
     def add_annotation(self, annotation: Annotation):
@@ -41,7 +50,7 @@ class AnnotationPage(BaseID):
 
 
 class Canvas(BaseID):
-    type: str = 'Canvas'
+    type: str = "Canvas"
     label: LanguageString
     height: int
     width: int
@@ -60,15 +69,15 @@ class Canvas(BaseID):
 
 class Manifest(BaseID):
     context: str = Field(
-        default='http://iiif.io/api/presentation/3/context.json',
-        alias='@context')
-    type: str = 'Manifest'
+        default="http://iiif.io/api/presentation/3/context.json", alias="@context"
+    )
+    type: str = "Manifest"
     label: LanguageString
     metadata: list[LabelValue] = []
     summary: LanguageString | None
     thumbnail: Thumbnail | None
-    viewingDirection: str = 'left-to-right'
-    behavior: list[str] = ['paged']
+    viewingDirection: str = "left-to-right"
+    behavior: list[str] = ["paged"]
     rights: AnyUrl | str | None
     requiredStatement: LabelValue | None
     provider: list[Provider] | None
@@ -82,9 +91,9 @@ class Manifest(BaseID):
 
 class Collection(BaseID):
     context: str = Field(
-        default='http://iiif.io/api/presentation/3/context.json',
-        alias='@context')
-    type: str = 'Collection'
+        default="http://iiif.io/api/presentation/3/context.json", alias="@context"
+    )
+    type: str = "Collection"
     label: LanguageString
     requiredStatement: LabelValue | None
     items: list = []
