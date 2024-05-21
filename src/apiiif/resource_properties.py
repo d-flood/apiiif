@@ -1,6 +1,5 @@
 from multiprocessing import context
 from pydantic import BaseModel, AnyUrl, root_validator, validator, Field
-from pytest import fail
 
 
 class BaseID(BaseModel):
