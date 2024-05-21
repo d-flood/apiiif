@@ -1,5 +1,6 @@
 from multiprocessing import context
-from pydantic import BaseModel, AnyUrl, root_validator, validator
+from pydantic import BaseModel, AnyUrl, root_validator, validator, Field
+from pytest import fail
 
 
 class BaseID(BaseModel):
@@ -81,8 +82,11 @@ class ImageService(BaseID):
     profile: str = "level0"
 
 
-# class AuthService(BaseID):
-#     context: str = 'http://iiif.io/api/auth/1/context.json'
-#     profile: str = 'http://iiif.io/api/auth/1/external'
-#     label: LanguageString
-#     type: str = 'AuthCookieService3'
+class ExternalAuthService(BaseModel):
+    context: str = Field(
+        default="http://iiif.io/api/auth/1/context.json", alias="@context"
+    )
+    profile: str = "http://iiif.io/api/auth/1/external"
+    label: LanguageString
+    failureHeader: LanguageString
+    failureDescription: LanguageString

@@ -8,6 +8,7 @@ from apiiif.resource_properties import (
     Provider,
     Choice,
     ImageService,
+    ExternalAuthService,
 )
 from apiiif.resource_types import (
     Collection,
@@ -120,13 +121,32 @@ class SingleLanguageFactory:
         )
 
     def IIIF_image(
-        self, thumbnail_url: str, iiif_root_url: str, width: int, height: int
+        self,
+        thumbnail_url: str,
+        iiif_root_url: str,
+        width: int,
+        height: int,
+        additional_services: list[ImageService | ExternalAuthService] = [],
     ):
+        services = [self.imageService(iiif_root_url)]
+        services.extend(additional_services)
         return IIIFImage(
             id=thumbnail_url,
             width=width,
             height=height,
-            service=[self.imageService(iiif_root_url)],
+            service=services,
+        )
+
+    def external_auth_service(
+        self,
+        label: str,
+        failure_header: str,
+        failure_description: str,
+    ):
+        return ExternalAuthService(
+            label=self.langugae_string(label),
+            failureHeader=self.langugae_string(failure_header),
+            failureDescription=self.langugae_string(failure_description),
         )
 
     def annotation_page(

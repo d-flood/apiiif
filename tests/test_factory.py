@@ -154,3 +154,16 @@ def test_annotation_page_choice():
         "http://example.com", "http://example.com/canvas", [iiif_image1, iiif_image2]
     )
     assert isinstance(annotation_page.items[0].body, Choice)
+
+
+def test_external_auth_service():
+    external_auth_service = factory.external_auth_service(
+        "label", "failure_header", "failure_description"
+    )
+    assert external_auth_service.label.dict(exclude_none=True) == {"en": ["label"]}
+    assert external_auth_service.failureHeader.dict(exclude_none=True) == {
+        "en": ["failure_header"]
+    }
+    assert external_auth_service.failureDescription.dict(exclude_none=True) == {
+        "en": ["failure_description"]
+    }

@@ -10,6 +10,7 @@ from apiiif.resource_properties import (
     Image,
     Choice,
     ImageService,
+    ExternalAuthService,
     BaseID,
 )
 
@@ -17,7 +18,7 @@ from apiiif.resource_properties import (
 class IIIFImage(Image):
     format: str = "image/jpeg"
     # as other services are defined, add them as options.
-    service: list[ImageService] = []
+    service: list[ImageService | ExternalAuthService] = []
 
 
 class Annotation(BaseID):
