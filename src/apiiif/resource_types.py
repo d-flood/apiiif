@@ -1,4 +1,4 @@
-from pydantic import BaseModel, AnyUrl, Field
+from pydantic.v1 import AnyUrl, Field
 
 from apiiif.resource_properties import (
     LanguageString,

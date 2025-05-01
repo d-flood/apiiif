@@ -1,5 +1,4 @@
-from multiprocessing import context
-from pydantic import BaseModel, AnyUrl, root_validator, validator, Field
+from pydantic.v1 import BaseModel, AnyUrl, root_validator, validator, Field
 
 
 class BaseID(BaseModel):
