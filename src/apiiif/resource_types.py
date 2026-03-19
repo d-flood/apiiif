@@ -1,4 +1,4 @@
-from pydantic.v1 import AnyUrl, Field
+from pydantic import AnyUrl, Field
 
 from apiiif.resource_properties import (
     LanguageString,
@@ -18,7 +18,7 @@ from apiiif.resource_properties import (
 class IIIFImage(Image):
     format: str = "image/jpeg"
     # as other services are defined, add them as options.
-    service: list[ImageService | ExternalAuthService] = []
+    service: list[ImageService | ExternalAuthService] = Field(default_factory=list)
 
 
 class Annotation(BaseID):
@@ -44,7 +44,7 @@ class AnnotationPage(BaseID):
         default="http://iiif.io/api/presentation/3/context.json", alias="@context"
     )
     type: str = "AnnotationPage"
-    items: list[Annotation] = []
+    items: list[Annotation] = Field(default_factory=list)
 
     def add_annotation(self, annotation: Annotation):
         self.items.append(annotation)
@@ -55,8 +55,8 @@ class Canvas(BaseID):
     label: LanguageString
     height: int
     width: int
-    behavior: list[str] | None  # ['paged'], ['facing-pages'], ['non-paged']
-    items: list = []
+    behavior: list[str] | None = None  # ['paged'], ['facing-pages'], ['non-paged']
+    items: list = Field(default_factory=list)
 
     def add_annotation_page(self, annotation_page: AnnotationPage):
         self.items.append(annotation_page)
@@ -74,17 +74,17 @@ class Manifest(BaseID):
     )
     type: str = "Manifest"
     label: LanguageString
-    metadata: list[LabelValue] = []
-    summary: LanguageString | None
-    thumbnail: Thumbnail | None
+    metadata: list[LabelValue] = Field(default_factory=list)
+    summary: LanguageString | None = None
+    thumbnail: Thumbnail | None = None
     viewingDirection: str = "left-to-right"
-    behavior: list[str] = ["paged"]
-    rights: AnyUrl | str | None
-    requiredStatement: LabelValue | None
-    provider: list[Provider] | None
-    homepage: Homepage | None
-    partOf: PartOf | None
-    items: list = []
+    behavior: list[str] = Field(default_factory=lambda: ["paged"])
+    rights: str | AnyUrl | None = None
+    requiredStatement: LabelValue | None = None
+    provider: list[Provider] | None = None
+    homepage: Homepage | None = None
+    partOf: PartOf | None = None
+    items: list = Field(default_factory=list)
 
     def add_canvas(self, canvas: Canvas):
         self.items.append(canvas)
@@ -96,8 +96,8 @@ class Collection(BaseID):
     )
     type: str = "Collection"
     label: LanguageString
-    requiredStatement: LabelValue | None
-    items: list = []
+    requiredStatement: LabelValue | None = None
+    items: list = Field(default_factory=list)
 
     def add_manifest(self, manifest: Manifest):
         self.items.append(manifest)

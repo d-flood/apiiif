@@ -14,7 +14,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["pydantic==2.11.4"]
+dependencies = ["pydantic>=2,<3"]
 description = ''
 dynamic = ["version"]
 keywords = []

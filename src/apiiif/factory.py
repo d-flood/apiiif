@@ -25,12 +25,12 @@ class SingleLanguageFactory:
     def __init__(self, auto_language: str = "en"):
         self.auto_language = auto_language
 
-    def langugae_string(self, message: str):
+    def language_string(self, message: str):
         return LanguageString(**{self.auto_language: [message]})
 
     def label_value(self, label: str, value: str):
         return LabelValue(
-            label=self.langugae_string(label), value=self.langugae_string(value)
+            label=self.language_string(label), value=self.language_string(value)
         )
 
     def requiredStatement(self, label: str, value: str):
@@ -44,7 +44,7 @@ class SingleLanguageFactory:
 
     def homepage(self, url: str, label: str):
         return Homepage(
-            id=url, label=self.langugae_string(label), language=[self.auto_language]
+            id=url, label=self.language_string(label), language=[self.auto_language]
         )
 
     def partOf(self, url: str):
@@ -53,7 +53,7 @@ class SingleLanguageFactory:
     def provider(self, url: str, label: str, homepage: Homepage):
         return Provider(
             id=url,
-            label=self.langugae_string(label),
+            label=self.language_string(label),
             homepage=[homepage],
             logo=[self.logo(url, 100, 100)],
         )
@@ -69,7 +69,7 @@ class SingleLanguageFactory:
     ):
         return Collection(
             id=url,
-            label=self.langugae_string(label),
+            label=self.language_string(label),
             requiredStatement=self.requiredStatement(
                 attribution_label, attribution_value
             ),
@@ -79,7 +79,7 @@ class SingleLanguageFactory:
         self,
         url: str,
         label: str,
-        metadata: list[LabelValue] = [],
+        metadata: list[LabelValue] | None = None,
         summary: str | None = None,
         thumbnail: Thumbnail | None = None,
         viewingDirection: str = "left-to-right",
@@ -92,9 +92,9 @@ class SingleLanguageFactory:
     ):
         return Manifest(
             id=url,
-            label=self.langugae_string(label),
-            metadata=metadata,
-            summary=self.langugae_string(summary) if summary else None,
+            label=self.language_string(label),
+            metadata=metadata or [],
+            summary=self.language_string(summary) if summary else None,
             thumbnail=thumbnail,
             viewingDirection=viewingDirection,
             behavior=[behavior],
@@ -114,7 +114,7 @@ class SingleLanguageFactory:
     ):
         return Canvas(
             id=url,
-            label=self.langugae_string(label),
+            label=self.language_string(label),
             height=height,
             width=width,
             behavior=[behavior],
@@ -126,10 +126,10 @@ class SingleLanguageFactory:
         iiif_root_url: str,
         width: int,
         height: int,
-        additional_services: list[ImageService | ExternalAuthService] = [],
+        additional_services: list[ImageService | ExternalAuthService] | None = None,
     ):
         services = [self.imageService(iiif_root_url)]
-        services.extend(additional_services)
+        services.extend(additional_services or [])
         return IIIFImage(
             id=thumbnail_url,
             width=width,
@@ -144,9 +144,9 @@ class SingleLanguageFactory:
         failure_description: str,
     ):
         return ExternalAuthService(
-            label=self.langugae_string(label),
-            failureHeader=self.langugae_string(failure_header),
-            failureDescription=self.langugae_string(failure_description),
+            label=self.language_string(label),
+            failureHeader=self.language_string(failure_header),
+            failureDescription=self.language_string(failure_description),
         )
 
     def annotation_page(

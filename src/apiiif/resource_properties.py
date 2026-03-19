@@ -1,10 +1,11 @@
-from pydantic.v1 import BaseModel, AnyUrl, root_validator, validator, Field
+from pydantic import BaseModel, AnyUrl, field_validator, model_validator, Field
 
 
 class BaseID(BaseModel):
 
-    @validator("id", pre=True)
-    def slugify(s):
+    @field_validator("id", mode="before")
+    @classmethod
+    def slugify(cls, s):
         if isinstance(s, str):
             return s.replace(" ", "%20")
         return s
@@ -18,17 +19,18 @@ class LanguageString(BaseModel):
     Add additional languages as needed, but once more than one exists,
     logic is needed to enable all to be optional, but one must be declared."""
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_language_string(cls, values):
-        if len(values) == 0:
+        if isinstance(values, dict) and len(values) == 0:
             raise ValueError("At least one language string must be provided.")
         return values
 
-    en: list[str] | None
-    fr: list[str] | None
-    de: list[str] | None
-    it: list[str] | None
-    es: list[str] | None
+    en: list[str] | None = None
+    fr: list[str] | None = None
+    de: list[str] | None = None
+    it: list[str] | None = None
+    es: list[str] | None = None
 
 
 class LabelValue(BaseModel):
@@ -72,7 +74,7 @@ class Provider(BaseID):
 
 class Choice(BaseModel):
     type: str = "Choice"
-    items: list = []
+    items: list = Field(default_factory=list)
 
 
 class ImageService(BaseID):
